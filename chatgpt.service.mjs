@@ -1,27 +1,29 @@
-const fetch = require("isomorphic-fetch");
-const { ChatGPTAPI } = require("./chatgptapi");
-const { SocksProxyAgent } = require("socks-proxy-agent");
-const { HttpsProxyAgent } = require("https-proxy-agent");
+import fetch from "isomorphic-fetch";
+import * as dotenv from "dotenv";
+import { ChatGPTAPI } from "chatgpt";
+import socksProxy from "socks-proxy-agent";
+import httpsProxy from "https-proxy-agent";
 
-module.exports = class {
+dotenv.config();
+
+export default class {
   constructor() {
     const { SOCKS_PROXY, HTTPS_PROXY } = process.env;
     if (HTTPS_PROXY) {
       console.log("use proxy===", HTTPS_PROXY); // connect proxy
-      this.proxyAgent = new HttpsProxyAgent(HTTPS_PROXY);
+      this.proxyAgent = new httpsProxy.HttpsProxyAgent(HTTPS_PROXY);
     } else if (SOCKS_PROXY) {
       console.log("use proxy===", SOCKS_PROXY);
-      this.proxyAgent = new SocksProxyAgent(SOCKS_PROXY); // socks://127.0.0.1:1080 使用远程DNS
+      this.proxyAgent = new socksProxy.SocksProxyAgent(SOCKS_PROXY); // socks://127.0.0.1:1080 使用远程DNS
     }
 
     const proxyFetch = (url, options) => {
-      console.log("===fetch===", url);
+      // console.log("===fetch===", url);
       return fetch(url, {
         ...options,
         agent: this.proxyAgent,
-      }).catch(err=>{
-         
-      })
+      }).catch((err) => {
+      });
     };
     this.api = new ChatGPTAPI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -61,4 +63,4 @@ module.exports = class {
         callback({ data: "[DONE]" });
       });
   }
-};
+}

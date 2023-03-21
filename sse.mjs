@@ -1,9 +1,8 @@
-const uuidv4 = require("uuid").v4;
+import { v4 as uuidv4 } from "uuid";
 
 const seeclients = {};
 
-module.exports = function (opts = {}) {
-
+export default function (opts = {}) {
   return function (req, res, next) {
     req.newSeeClient = function () {
       req.socket.setTimeout(0);

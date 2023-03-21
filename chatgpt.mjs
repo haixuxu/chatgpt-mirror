@@ -1,25 +1,16 @@
-const express = require("express");
-const router = express.Router();
-const uuidv4 = require("uuid").v4;
-const ChatgptService = require("./chatgpt.service");
+import express from "express";
+import { v4 as uuidv4 } from "uuid";
+import ChatgptService from "./chatgpt.service.mjs";
 
+const router = express.Router();
 const chatgptsvc = new ChatgptService();
 
 router.post("/moderations", function (req, res) {
-  res.json({
-    blocked: false,
-    flagged: false,
-    moderation_id: uuidv4(),
-  });
+  res.json({ blocked: false, flagged: false, moderation_id: uuidv4() });
 });
 
 router.get("/conversations", function (req, res) {
-  res.json({
-    items: [],
-    total: 0,
-    limit: 20,
-    offset: 0,
-  });
+  res.json({ items: [], total: 0, limit: 20, offset: 0 });
 });
 
 router.post("/conversation", function (req, res) {
@@ -29,7 +20,7 @@ router.post("/conversation", function (req, res) {
   message = parts.length > 0 ? parts[0] : "";
   const client = req.newSeeClient();
   chatgptsvc.sendMessage(message, parent_message_id, function (data) {
-    client.send(data.type,data.data);
+    client.send(data.type, data.data);
   });
 });
 
@@ -37,4 +28,4 @@ router.post("/conversation/gen_title/", function (req, res) {
   res.json({ title: "" });
 });
 
-module.exports = router;
+export default router;

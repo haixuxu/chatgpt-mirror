@@ -1,0 +1,33 @@
+{
+  "name": "mychatgpt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuxihai123/chatgpt-mirror.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xuxihai123/chatgpt-mirror/issues"
+  },
+  "homepage": "https://github.com/xuxihai123/chatgpt-mirror#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "chatgpt": "^5.1.2",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "https-proxy-agent": "^5.0.1",
+    "isomorphic-fetch": "^3.0.0",
+    "morgan": "^1.10.0",
+    "socks-proxy-agent": "^7.0.0",
+    "uuid": "^9.0.0"
+  }
+}

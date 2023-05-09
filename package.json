@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "start": "node app.mjs"
   },
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/xuxihai123/chatgpt-mirror#readme",
   "dependencies": {
+    "basic-auth-connect": "^1.0.0",
     "body-parser": "^1.20.2",
     "chatgpt": "^5.1.2",
     "compression": "^1.7.4",

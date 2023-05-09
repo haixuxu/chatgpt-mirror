@@ -1,10 +1,7 @@
 import fetch from "isomorphic-fetch";
-import * as dotenv from "dotenv";
 import { ChatGPTAPI } from "chatgpt";
 import socksProxy from "socks-proxy-agent";
 import httpsProxy from "https-proxy-agent";
-
-dotenv.config();
 
 export default class {
   constructor() {
@@ -22,8 +19,7 @@ export default class {
       return fetch(url, {
         ...options,
         agent: this.proxyAgent,
-      }).catch((err) => {
-      });
+      }).catch((err) => {});
     };
     this.api = new ChatGPTAPI({
       apiKey: process.env.OPENAI_API_KEY,

@@ -1,8 +1,9 @@
 import fs from "fs";
 
-const allFileContents = fs.readFileSync("./passwd.txt", "utf-8");
 let passObj = {};
+
 try {
+  const allFileContents = fs.readFileSync("./passwd.txt", "utf-8");
   allFileContents.split(/\r?\n/).forEach((line) => {
     const parts = line.split(":");
     passObj[parts[0]] = parts[1];

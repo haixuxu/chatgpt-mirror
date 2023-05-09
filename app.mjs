@@ -5,8 +5,8 @@ import compression from "compression";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-import basicAuth from "basic-auth-connect";
-import sse from "./sse.mjs";
+import basicAuth from "./middlewares/basicauth.mjs";
+import sse from "./middlewares/sse.mjs";
 import chatgptRouter from "./chatgpt.mjs";
 import authCallback from "./auth.mjs";
 
@@ -22,11 +22,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(sse());
-app.use("/backend-api", chatgptRouter);
 if (process.env.BASIC_AUTH === "true") {
   app.use(basicAuth(authCallback));
 }
+
+app.use(sse());
+app.use("/backend-api", chatgptRouter);
+
 app.use(express.static(path.join(__dirname, "public"), { maxAge: 3600 * 30 }));
 
 // app.set("views", path.join(__dirname, "views"));

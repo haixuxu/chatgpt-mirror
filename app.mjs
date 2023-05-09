@@ -22,14 +22,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+
+
+app.use(express.static(path.join(__dirname, "public"), { maxAge: 3600 * 30 }));
+
 if (process.env.BASIC_AUTH === "true") {
-  app.use(basicAuth(authCallback));
+  app.use(basicAuth(authCallback,'please enter auth user,pass'));
 }
 
 app.use(sse());
 app.use("/backend-api", chatgptRouter);
-
-app.use(express.static(path.join(__dirname, "public"), { maxAge: 3600 * 30 }));
 
 // app.set("views", path.join(__dirname, "views"));
 // app.set("view engine", "jade");

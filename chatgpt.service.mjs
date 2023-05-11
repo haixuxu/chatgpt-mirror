@@ -1,16 +1,16 @@
-import fetch from "isomorphic-fetch";
-import { ChatGPTAPI } from "chatgpt";
-import socksProxy from "socks-proxy-agent";
-import httpsProxy from "https-proxy-agent";
+import fetch from 'isomorphic-fetch';
+import { ChatGPTAPI } from './services/chatgpt.mjs';
+import socksProxy from 'socks-proxy-agent';
+import httpsProxy from 'https-proxy-agent';
 
 export default class {
   constructor() {
     const { SOCKS_PROXY, HTTPS_PROXY } = process.env;
     if (HTTPS_PROXY) {
-      console.log("use proxy===", HTTPS_PROXY); // connect proxy
+      console.log('use proxy===', HTTPS_PROXY); // connect proxy
       this.proxyAgent = new httpsProxy.HttpsProxyAgent(HTTPS_PROXY);
     } else if (SOCKS_PROXY) {
-      console.log("use proxy===", SOCKS_PROXY);
+      console.log('use proxy===', SOCKS_PROXY);
       this.proxyAgent = new socksProxy.SocksProxyAgent(SOCKS_PROXY); // socks://127.0.0.1:1080 使用远程DNS
     }
 
@@ -18,14 +18,28 @@ export default class {
       // console.log("===fetch===", url);
       return fetch(url, {
         ...options,
-        agent: this.proxyAgent,
+        agent: this.proxyAgent
       }).catch((err) => {});
     };
     this.api = new ChatGPTAPI({
       apiKey: process.env.OPENAI_API_KEY,
       fetch: proxyFetch,
-      debug: true,
+      debug: true
     });
+  }
+
+  call(apiurl, opts) {
+    return Promise.resolve();
+    // const apikey = process.env.OPENAI_API_KEY;
+    // return fetch(`https://api.openai.com/v1${apiurl}`, {
+    //   method:"POST",
+    //   ...opts,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${apikey}`
+    //   },
+    //   agent: this.proxyAgent
+    // }).catch((err) => {});
   }
 
   sendMessage(message, parentMessageId, callback) {
@@ -43,20 +57,20 @@ export default class {
               update_time: null,
               end_turn: null,
               weight: 0,
-              recipient: "all",
+              recipient: 'all',
               metadata: null,
               content: {
-                content_type: "text",
-                parts: [text],
-              },
+                content_type: 'text',
+                parts: [text]
+              }
             },
-            error: null,
+            error: null
           };
-          callback({ type: "add", data: dataobj });
-        },
+          callback({ type: 'add', data: dataobj });
+        }
       })
       .then(() => {
-        callback({ data: "[DONE]" });
+        callback({ data: '[DONE]' });
       });
   }
 }

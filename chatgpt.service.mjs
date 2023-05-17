@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { ChatGPTAPI } from './services/chatgpt.mjs';
+import { ChatGPTAPI } from './services/chatgptapi.mjs';
 import socksProxy from 'socks-proxy-agent';
 import httpsProxy from 'https-proxy-agent';
 

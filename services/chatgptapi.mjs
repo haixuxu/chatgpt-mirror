@@ -3,77 +3,8 @@ import Keyv from 'keyv';
 import pTimeout from 'p-timeout';
 import QuickLRU from 'quick-lru';
 import { v4 as uuidv4 } from 'uuid';
-// src/fetch-sse.ts
-import { createParser } from 'eventsource-parser';
-// src/tokenizer.ts
-import { get_encoding } from '@dqbd/tiktoken';
-
-var tokenizer = get_encoding('cl100k_base');
-function encode(input) {
-  return tokenizer.encode(input);
-}
-
-// src/types.ts
-class ChatGPTError extends Error {}
-// src/fetch.ts
-var fetch = globalThis.fetch;
-
-// src/stream-async-iterable.ts
-async function* streamAsyncIterable(stream) {
-  const reader = stream.getReader();
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        return;
-      }
-      yield value;
-    }
-  } finally {
-    reader.releaseLock();
-  }
-}
-
-// src/fetch-sse.ts
-async function fetchSSE(url, options, fetch2 = fetch) {
-  const { onMessage, ...fetchOptions } = options;
-  const res = await fetch2(url, fetchOptions);
-  if (!res.ok) {
-    let reason;
-    try {
-      reason = await res.text();
-    } catch (err) {
-      reason = res.statusText;
-    }
-    const msg = `ChatGPT error ${res.status}: ${reason}`;
-    const error = new ChatGPTError(msg, { cause: reason });
-    error.statusCode = res.status;
-    error.statusText = res.statusText;
-    throw error;
-  }
-  const parser = createParser((event) => {
-    if (event.type === 'event') {
-      onMessage(event.data);
-    }
-  });
-  if (!res.body.getReader) {
-    const body = res.body;
-    if (!body.on || !body.read) {
-      throw new ChatGPTError('unsupported "fetch" implementation');
-    }
-    body.on('readable', () => {
-      let chunk;
-      while (null !== (chunk = body.read())) {
-        parser.feed(chunk.toString());
-      }
-    });
-  } else {
-    for await (const chunk of streamAsyncIterable(res.body)) {
-      const str = new TextDecoder().decode(chunk);
-      parser.feed(str);
-    }
-  }
-}
+import fetchSSE from './chatgpt/fetchsse.mjs';
+import encode from './chatgpt/encode.mjs';
 
 // src/chatgpt-api.ts
 var CHATGPT_MODEL = 'gpt-3.5-turbo';
@@ -255,7 +186,8 @@ Current date: ${currentDate}`;
           if (!res.ok) {
             const reason = await res.text();
             const msg = `OpenAI error ${res.status || res.statusText}: ${reason}`;
-            const error = new ChatGPTError(msg, { cause: res });
+            const error = new Error(msg);
+            error.cause = res;
             error.statusCode = res.status;
             error.statusText = res.statusText;
             return reject(error);
@@ -375,5 +307,4 @@ Current date: ${currentDate}`;
   }
 }
 
-export { ChatGPTAPI, ChatGPTError };
-//# sourceMappingURL=index.js.map
+export { ChatGPTAPI };

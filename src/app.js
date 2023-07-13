@@ -5,10 +5,10 @@ import compression from "compression";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-import basicAuth from "./middlewares/basicauth.mjs";
-import sse from "./middlewares/sse.mjs";
-import chatgptRouter from "./chatgpt.mjs";
-import authCallback from "./auth.mjs";
+import basicAuth from "./middlewares/basicauth.js";
+import sse from "./middlewares/sse.js";
+import chatgptRouter from "./chatgpt.js";
+import authCallback from "./auth.js";
 
 dotenv.config();
 

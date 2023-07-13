@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node app.mjs"
+    "lint": "eslint src/**",
+    "build": "babel src -d lib",
+    "prepublish": "npm run build",
+    "start": "node lib/",
+    "dev": "babel-node src/app.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +35,15 @@
     "morgan": "^1.10.0",
     "socks-proxy-agent": "^7.0.0",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.6",
+    "@babel/node": "^7.8.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.6",
+    "@babel/register": "^7.8.6",
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0"
   }
 }

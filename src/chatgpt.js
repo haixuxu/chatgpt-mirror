@@ -1,6 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import ChatgptService from './chatgpt.service.mjs';
+import ChatgptService from './chatgpt.service.js';
 
 const router = express.Router();
 let chatgptsvc = null;
@@ -14,7 +14,6 @@ function setupSvc() {
 router.post('/moderations', function(req, res) {
   setupSvc();
   chatgptsvc.call('/moderations').then((ret) => {
-    console.log(ret);
     res.json({ blocked: false, flagged: false, moderation_id: uuidv4() });
   });
 });
@@ -22,7 +21,6 @@ router.post('/moderations', function(req, res) {
 router.get('/conversations', function(req, res) {
   setupSvc();
   chatgptsvc.call('/conversations').then((ret) => {
-    console.log(ret);
     res.json({ items: [], total: 0, limit: 20, offset: 0 });
   });
 });

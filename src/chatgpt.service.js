@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { ChatGPTAPI } from './services/chatgptapi.mjs';
+import { ChatGPTAPI } from './services/chatgptapi.js';
 import socksProxy from 'socks-proxy-agent';
 import httpsProxy from 'https-proxy-agent';
 
@@ -24,7 +24,7 @@ export default class {
     this.api = new ChatGPTAPI({
       apiKey: process.env.OPENAI_API_KEY,
       fetch: proxyFetch,
-      debug: true
+      debug: false
     });
   }
 
@@ -48,29 +48,36 @@ export default class {
         parentMessageId,
         onProgress: (partialResponse) => {
           const { id, role, text } = partialResponse;
-          const dataobj = {
-            message: {
-              id,
-              role,
-              user: null,
-              create_time: null,
-              update_time: null,
-              end_turn: null,
-              weight: 0,
-              recipient: 'all',
-              metadata: null,
-              content: {
-                content_type: 'text',
-                parts: [text]
-              }
-            },
-            error: null
-          };
-          callback({ type: 'add', data: dataobj });
+          callback({ type: 'add', data: buildMsg(id, role, text) });
         }
       })
       .then(() => {
+        callback(null, { data: '[DONE]' });
+      })
+      .catch((err) => {
+        callback({ type: 'add', data: buildMsg(1, 'user', 'invalid chatapi key!') });
         callback({ data: '[DONE]' });
       });
   }
+}
+
+function buildMsg(id, role, text) {
+  return {
+    message: {
+      id,
+      role,
+      user: null,
+      create_time: null,
+      update_time: null,
+      end_turn: null,
+      weight: 0,
+      recipient: 'all',
+      metadata: null,
+      content: {
+        content_type: 'text',
+        parts: [text]
+      }
+    },
+    error: null
+  };
 }

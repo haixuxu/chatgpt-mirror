@@ -3,8 +3,8 @@ import Keyv from 'keyv';
 import pTimeout from 'p-timeout';
 import QuickLRU from 'quick-lru';
 import { v4 as uuidv4 } from 'uuid';
-import fetchSSE from './chatgpt/fetchsse.mjs';
-import encode from './chatgpt/encode.mjs';
+import fetchSSE from './chatgpt/fetchsse.js';
+import encode from './chatgpt/encode.js';
 
 // src/chatgpt-api.ts
 var CHATGPT_MODEL = 'gpt-3.5-turbo';

@@ -1,6 +1,6 @@
 // src/fetch-sse.ts
 import { createParser } from 'eventsource-parser';
-import streamAsyncIterable from './streamInterable.mjs';
+import streamAsyncIterable from './streamInterable.js';
 
 // src/fetch.ts
 var fetch = globalThis.fetch;

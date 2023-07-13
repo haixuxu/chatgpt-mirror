@@ -1,5 +1,5 @@
 apps:
-  - script: ./dist/app.js
+  - script: ./lib/app.js
     name: 'mychatgpt'
     instances: 1,
     exec_mode: 'fork'

@@ -52,7 +52,7 @@ export default class {
         }
       })
       .then(() => {
-        callback(null, { data: '[DONE]' });
+        callback({ data: '[DONE]' });
       })
       .catch((err) => {
         callback({ type: 'add', data: buildMsg(1, 'user', 'invalid chatapi key!') });
